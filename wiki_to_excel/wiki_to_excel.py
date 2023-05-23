@@ -2,8 +2,8 @@ from openpyxl import load_workbook
 from bs4 import BeautifulSoup
 import requests
 
-# Função para obter os dados
-def obter_dados_wikipedia(url):
+# Função para obter os dados da tabela
+def obter_dados_tabela(url):
     requisicao = requests.get(url)
     html = requisicao.text
     soup = BeautifulSoup(html, "html.parser")
@@ -12,6 +12,7 @@ def obter_dados_wikipedia(url):
     tabela_classificacao = None
     dados = []
 
+    # Localiza a tabela de classificação na página
     for tabela in tabelas:
         if "classificação" in tabela.get_text().lower():
             tabela_classificacao = tabela
@@ -28,17 +29,19 @@ def obter_dados_wikipedia(url):
                 aproveitamento = colunas[10].text.strip()
 
                 dados.append([time, pontuacao, posicao, aproveitamento])
-    
+
     return dados
 
-# Dados da Wikipedia
-url_wikipedia = "https://pt.wikipedia.org/wiki/Campeonato_Brasileiro_de_Futebol_de_2022_-_S%C3%A9rie_A"
-dados_wikipedia = obter_dados_wikipedia(url_wikipedia)
+# URL da página da tabela (pode ser qualquer tabela HTML)
+url_tabela = "https://exemplo.com/tabela"
 
-# Excel
-arquivo_excel = "E:/Campeonato_Brasileiro.xlsx"
-planilha_desejada = "Campeonato 2022"
-colunas = ["A", "B", "C", "D"]  # Colunas: "Times", "Pontuação", "Posição", "Aproveitamento"
+# Obtém os dados da tabela
+dados_tabela = obter_dados_tabela(url_tabela)
+
+# Arquivo Excel
+arquivo_excel = "Caminho/Para/Seu/Arquivo.xlsx"
+planilha_desejada = "Nome da Planilha"
+colunas = ["A", "B", "C", "D"]  
 
 # Função para inserir os dados no Excel
 def inserir_dados_excel(arquivo, planilha, colunas, dados):
@@ -49,12 +52,13 @@ def inserir_dados_excel(arquivo, planilha, colunas, dados):
         valores = [dados[j][i] for j in range(len(dados))]
         for j, valor in enumerate(valores):
             linha = j + 2
-            if coluna == "D":  # Coluna do aproveitamento
+            if coluna == "D":  
                 valor = f"{valor}%"
             sheet[f"{coluna}{linha}"] = valor
 
     workbook.save(arquivo)
 
+# Função para visualizar as colunas após a inserção
 def visualizar_colunas(arquivo, planilha, colunas):
     workbook = load_workbook(arquivo)
     sheet = workbook[planilha]
@@ -66,10 +70,9 @@ def visualizar_colunas(arquivo, planilha, colunas):
             print(valor)
         print()
 
-
 # Inserir os dados no Excel
 try:
-    inserir_dados_excel(arquivo_excel, planilha_desejada, colunas, dados_wikipedia)
+    inserir_dados_excel(arquivo_excel, planilha_desejada, colunas, dados_tabela)
     print("Inserção de dados bem-sucedida!")
 except Exception as e:
     print("Ocorreu um erro durante a inserção de dados:", str(e))
@@ -77,3 +80,5 @@ except Exception as e:
 # Visualizar as colunas após a inserção
 print("Colunas após a inserção:")
 visualizar_colunas(arquivo_excel, planilha_desejada, colunas)
+
+
