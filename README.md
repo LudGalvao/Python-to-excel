@@ -8,4 +8,4 @@ Certifique-se de ter as seguintes bibliotecas instaladas em seu ambiente Python:
 - `requests`
 
 Você pode instalá-las usando o pip:
-# pip install openpyxl beautifulsoup4 requests
+pip install openpyxl beautifulsoup4 requests
