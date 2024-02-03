@@ -1,4 +1,4 @@
-# Python-to-Excel
+# Web Scraping
 Este código em Python utiliza as bibliotecas `openpyxl` e `BeautifulSoup` para obter dados da tabela de classificação de um campeonato de futebol na Wikipedia e inseri-los em um arquivo Excel.
 
 ## Requisitos
